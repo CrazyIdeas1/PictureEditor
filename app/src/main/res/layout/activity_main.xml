@@ -1,18 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:id="@+id/BottomBar"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
 
-</android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/SavePicture"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/savePicture"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/RevokePath"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/revokePath"
+            android:textSize="20sp"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/paintSize"
+        android:layout_above="@id/BottomBar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_height="45dp">
+
+        <Button
+            android:id="@+id/paintSizeSmall"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="@string/paintSizeSmall"
+            android:textSize="15sp"/>
+        <Button
+            android:id="@+id/paintSizeInside"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="@string/paintSizeInside"
+            android:textSize="18sp"/>
+        <Button
+            android:id="@+id/paintSizeBig"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="@string/paintSizeBig"
+            android:textSize="22sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/paintColor"
+        android:layout_above="@id/paintSize"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+        <Button
+            android:id="@+id/paintColorBlack"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/paintColorBlack"/>
+        <Button
+            android:id="@+id/paintColorRed"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/paintColorRed"/>
+        <Button
+            android:id="@+id/paintColorOrange"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/paintColorOrange"/>
+        <Button
+            android:id="@+id/paintColorYellow"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/paintColorYellow"/>
+        <Button
+            android:id="@+id/paintColorGreen"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/paintColorGreen"/>
+        <Button
+            android:id="@+id/paintColorBlue"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/paintColorBlue"/>
+        <Button
+            android:id="@+id/paintColorPurple"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/paintColorPurple"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/showCanvas"
+        android:layout_above="@id/paintColor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</RelativeLayout>

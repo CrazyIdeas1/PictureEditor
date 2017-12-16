@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PictureEditor</string>
+    <string name="savePicture">保存</string>
+    <string name="revokePath">撤销</string>
+    <string name="paintSizeSmall">小</string>
+    <string name="paintSizeInside">中</string>
+    <string name="paintSizeBig">大</string>
+
 </resources>
