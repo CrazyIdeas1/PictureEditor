@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -46,6 +47,10 @@ public class MyCanvasView extends View {
     private DrawPath dp;
     private List<DrawPath> savePath; //保存路径
     private List<DrawPath> deletePath; //保存删除的路径
+
+    //private boolean isMove = false;     //判断手指是否移动
+    private static final float MIN_MOVE_DISTANCE = 2;
+    private float mX,mY;//临时坐标 记录作用
 
     //存储以前的路径
     class DrawPath{
@@ -98,6 +103,7 @@ public class MyCanvasView extends View {
         }
     }
 
+    private static final String TAG = "isMove";
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
@@ -105,22 +111,33 @@ public class MyCanvasView extends View {
 
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                //Log.d(TAG, "onTouchEvent:按下 "+ isMove);
                 mPath = new Path();
                 dp = new DrawPath();
                 dp.path = mPath;
                 dp.paint = mPaint;
+                mX = x;
+                mY = y;
                 mPath.moveTo(x,y);
                 break;
             case MotionEvent.ACTION_MOVE:
+                //Log.d(TAG, "onTouchEvent:移动1 "+ isMove);
                 mPath.lineTo(x,y);
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                mCanvas.drawPath(mPath,mPaint);
-                savePath.add(dp);  //存储路径
-                mPath = null;   //需要设置为空如果不设置为空  最后一个路径 撤回不了，为什么呢？
-                // 因为不设置为 NULL 下面的postInvalidate（）会把路径再画一遍 而它没有保存在 savePath里面 所以删除不了
-                postInvalidate();
+                //Log.d(TAG, "onTouchEvent: 抬起"+ isMove);
+                //isMove = false;
+                float dx = Math.abs(x - mX);
+                float dy = Math.abs(y - mY);
+                if (dx > MIN_MOVE_DISTANCE || dy > MIN_MOVE_DISTANCE){
+                    Log.d(TAG, "onTouchEvent: 抬起进入");
+                    mCanvas.drawPath(mPath,mPaint);
+                    savePath.add(dp);  //存储路径
+                    mPath = null;   //需要设置为空如果不设置为空  最后一个路径 撤回不了，为什么呢？
+                    // 因为不设置为 NULL 下面的postInvalidate（）会把路径再画一遍 而它没有保存在 savePath里面 所以删除不了
+                    postInvalidate();
+                }
                 break;
         }
         return true;
