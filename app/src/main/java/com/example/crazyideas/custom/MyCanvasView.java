@@ -11,6 +11,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Created by CrazyIdeas on 2017/12/16.
  *
@@ -39,12 +43,22 @@ public class MyCanvasView extends View {
     private int paintSize = 10;  //设置画笔大小
     private int paintColor = 0;  //设置画笔颜色
 
+    private DrawPath dp;
+    private List<DrawPath> savePath; //保存路径
+    private List<DrawPath> deletePath; //保存删除的路径
+
+    //存储以前的路径
+    class DrawPath{
+        public Path path;
+        public Paint paint;
+    }
     public MyCanvasView(Context context,int width, int height) {
         super(context);
         this.context = context;
         screenWidth = width;
         screenHeight = height;
-
+        savePath = new ArrayList<>();
+        deletePath = new ArrayList<>();
         initCanvas();
     }
 
@@ -92,6 +106,9 @@ public class MyCanvasView extends View {
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 mPath = new Path();
+                dp = new DrawPath();
+                dp.path = mPath;
+                dp.paint = mPaint;
                 mPath.moveTo(x,y);
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -100,6 +117,9 @@ public class MyCanvasView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 mCanvas.drawPath(mPath,mPaint);
+                savePath.add(dp);  //存储路径
+                mPath = null;   //需要设置为空如果不设置为空  最后一个路径 撤回不了，为什么呢？
+                // 因为不设置为 NULL 下面的postInvalidate（）会把路径再画一遍 而它没有保存在 savePath里面 所以删除不了
                 postInvalidate();
                 break;
         }
@@ -115,5 +135,24 @@ public class MyCanvasView extends View {
     public void selectPaintColor(int opt){
         paintColor = opt;
         initPaint();
+    }
+    //实现撤销功能
+    public void revoke(){
+        if (savePath != null && savePath.size() > 0){
+            DrawPath drawPath = savePath.get(savePath.size()-1);
+            deletePath.add(drawPath);
+            savePath.remove(savePath.size()-1);
+            againOnDrawBitmap();
+        }
+    }
+    //重画把保存的路径画到画布上
+    private void againOnDrawBitmap(){
+        initCanvas();//清空画布
+        Iterator<DrawPath> iterator = savePath.iterator();
+        while(iterator.hasNext()){
+            DrawPath drawPath = iterator.next();
+            mCanvas.drawPath(drawPath.path,drawPath.paint);
+        }
+        postInvalidate();
     }
 }
