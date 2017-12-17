@@ -94,7 +94,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.SavePicture:break;
-            case R.id.RevokePath:break;
+            case R.id.RevokePath:
+                canvasView.revoke();
+                break;
             case R.id.paintSizeSmall:
                 canvasView.selectPaintSize(10);
                 break;
