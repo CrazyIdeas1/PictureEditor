@@ -1,17 +1,24 @@
 package com.example.crazyideas.custom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -81,7 +88,7 @@ public class MyCanvasView extends View {
         initPaint();
         mPaintBitmap = new Paint();//
         mBitmap = Bitmap.createBitmap(screenWidth,screenHeight, Bitmap.Config.ARGB_8888);
-        ///mBitmap.eraseColor(Color.argb(0,0,0,0));
+        mBitmap.eraseColor(Color.argb(255,255,250,250));
         mCanvas = new Canvas(mBitmap);
         mCanvas.drawColor(Color.TRANSPARENT);
     }
@@ -172,4 +179,32 @@ public class MyCanvasView extends View {
         }
         postInvalidate();
     }
+    //把画板 保存在手机相册中
+    public void savePictrue(){
+        String path = Environment.getExternalStorageDirectory() + File.separator +"huatu";
+        File appDir = new File(path);
+
+        if (!appDir.exists()){
+            appDir.mkdir();
+        }
+
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir,fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            mBitmap.compress(Bitmap.CompressFormat.JPEG,60,fos);
+            fos.flush();
+            fos.close();
+
+            Uri uri = Uri.fromFile(file);
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,uri));
+            Log.d(TAG, "savePictrue: 保存成功");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
